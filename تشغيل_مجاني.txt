@@ -1,0 +1,104 @@
+═══════════════════════════════════════════════════════════════
+     رفع المشروع على GitHub وتشغيله مجاناً
+═══════════════════════════════════════════════════════════════
+
+📤 الخطوة 1: رفع المشروع على GitHub
+───────────────────────────────────────────────────────────────
+
+1. اذهب إلى: https://github.com
+2. سجّل الدخول بحسابك: iraqdev
+3. اضغط "+" → "New repository"
+4. اسم المشروع: jwt-auth-system (أو أي اسم تريده)
+5. اختر Public أو Private
+6. ⚠️ لا تضع علامة على "Initialize with README"
+7. اضغط "Create repository"
+
+بعد إنشاء الـ Repository، افتح Terminal في مجلد المشروع واكتب:
+
+git remote add origin https://github.com/iraqdev/jwt-auth-system.git
+git branch -M main
+git push -u origin main
+
+(استبدل jwt-auth-system باسم الـ Repository الذي أنشأته)
+
+═══════════════════════════════════════════════════════════════
+🚀 الخطوة 2: تشغيل المشروع مجاناً على Render
+═══════════════════════════════════════════════════════════════
+
+Render.com هو أفضل خيار مجاني لـ Backend:
+
+1. اذهب إلى: https://render.com
+2. سجّل الدخول بحساب GitHub (iraqdev)
+3. اضغط "New +" → "Web Service"
+4. اختر الـ Repository: jwt-auth-system
+5. الإعدادات:
+   - Name: jwt-auth-system (أو أي اسم)
+   - Environment: Node
+   - Build Command: npm install
+   - Start Command: npm start
+   - Plan: Free
+
+6. اضغط "Advanced" وأضف Environment Variables:
+   JWT_ACCESS_SECRET=your_secret_key_here
+   JWT_REFRESH_SECRET=your_refresh_secret_here
+   JWT_ACCESS_EXPIRES_IN=900
+   JWT_REFRESH_EXPIRES_IN=604800
+   NODE_ENV=production
+   MONGODB_URI=mongodb://localhost:27017/jwt_auth_db
+
+   ⚠️ مهم: إذا كنت تستخدم MongoDB Atlas (سحابي):
+   - اذهب إلى: https://www.mongodb.com/cloud/atlas
+   - أنشئ حساب مجاني
+   - أنشئ Cluster مجاني
+   - انسخ رابط الاتصال
+   - ضعه في MONGODB_URI
+
+7. اضغط "Create Web Service"
+
+بعد بضع دقائق، ستحصل على رابط مثل:
+https://jwt-auth-system.onrender.com
+
+═══════════════════════════════════════════════════════════════
+🔄 بديل: استخدام Vercel (أسهل قليلاً)
+═══════════════════════════════════════════════════════════════
+
+1. اذهب إلى: https://vercel.com
+2. سجّل الدخول بحساب GitHub
+3. اضغط "Add New" → "Project"
+4. اختر الـ Repository: jwt-auth-system
+5. Framework Preset: Other
+6. Build Command: (اتركه فارغ)
+7. Output Directory: (اتركه فارغ)
+8. اضغط "Environment Variables" وأضف نفس المتغيرات
+9. اضغط "Deploy"
+
+═══════════════════════════════════════════════════════════════
+📝 ملاحظات مهمة:
+═══════════════════════════════════════════════════════════════
+
+✅ Render مجاني تماماً (مع بعض القيود)
+✅ Vercel مجاني أيضاً
+✅ MongoDB Atlas مجاني (512 MB)
+✅ بعد الرفع، استخدم الرابط بدلاً من localhost:3000
+
+مثال:
+بدلاً من: http://localhost:3000/api/auth/login
+استخدم: https://jwt-auth-system.onrender.com/api/auth/login
+
+═══════════════════════════════════════════════════════════════
+🔧 إعداد MongoDB Atlas (إذا لم يكن لديك):
+═══════════════════════════════════════════════════════════════
+
+1. اذهب إلى: https://www.mongodb.com/cloud/atlas
+2. سجّل حساب مجاني
+3. أنشئ Cluster جديد (Free Tier)
+4. اضغط "Connect" → "Connect your application"
+5. انسخ رابط الاتصال
+6. استبدل <password> بكلمة المرور
+7. استخدم الرابط في MONGODB_URI
+
+مثال:
+MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/jwt_auth_db?retryWrites=true&w=majority
+
+═══════════════════════════════════════════════════════════════
+
