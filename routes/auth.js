@@ -4,15 +4,10 @@ import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '.
 
 const router = express.Router();
 
-/**
- * Route: POST /api/auth/register
- * تسجيل مستخدم جديد
- */
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    // التحقق من البيانات المطلوبة
     if (!username || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -21,7 +16,6 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    // التحقق من وجود المستخدم
     const existingUser = await User.findOne({
       $or: [{ email }, { username }]
     });
@@ -34,11 +28,9 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    // إنشاء المستخدم
     const user = new User({ username, email, password });
     await user.save();
 
-    // إنشاء التوكنات
     const accessToken = generateAccessToken({ userId: user._id, email: user.email });
     const refreshToken = generateRefreshToken({ userId: user._id });
 
@@ -61,21 +53,16 @@ router.post('/register', async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'INTERNAL_ERROR',
-      message: 'حدث خطأ داخلي في السيرفر',
+      message: 'حدث خطا داخلي في السيرفر',
       details: error.message
     });
   }
 });
 
-/**
- * Route: POST /api/auth/login
- * تسجيل الدخول
- */
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // التحقق من البيانات المطلوبة
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -84,7 +71,6 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // البحث عن المستخدم
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({
@@ -94,7 +80,6 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // التحقق من كلمة المرور
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -104,7 +89,6 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // إنشاء التوكنات
     const accessToken = generateAccessToken({ userId: user._id, email: user.email });
     const refreshToken = generateRefreshToken({ userId: user._id });
 
@@ -133,15 +117,10 @@ router.post('/login', async (req, res) => {
   }
 });
 
-/**
- * Route: POST /api/auth/refresh
- * تجديد Access Token باستخدام Refresh Token
- */
 router.post('/refresh', async (req, res) => {
   try {
     const { refreshToken } = req.body;
 
-    // التحقق من وجود Refresh Token
     if (!refreshToken) {
       return res.status(400).json({
         success: false,
@@ -150,7 +129,6 @@ router.post('/refresh', async (req, res) => {
       });
     }
 
-    // التحقق من صحة Refresh Token
     let decoded;
     try {
       decoded = verifyRefreshToken(refreshToken);
@@ -176,7 +154,6 @@ router.post('/refresh', async (req, res) => {
       }
     }
 
-    // التحقق من وجود المستخدم
     const user = await User.findById(decoded.userId);
     if (!user) {
       return res.status(404).json({
@@ -186,7 +163,6 @@ router.post('/refresh', async (req, res) => {
       });
     }
 
-    // إنشاء Access Token جديد
     const accessToken = generateAccessToken({ userId: user._id, email: user.email });
 
     res.status(200).json({

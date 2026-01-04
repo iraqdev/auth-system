@@ -4,13 +4,8 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
-/**
- * Route: GET /api/protected/profile
- * مثال على Route محمي - الحصول على بيانات المستخدم
- */
 router.get('/profile', async (req, res) => {
   try {
-    // قراءة Access Token من Header
     const authHeader = req.headers.authorization;
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -21,9 +16,8 @@ router.get('/profile', async (req, res) => {
       });
     }
 
-    const token = authHeader.substring(7); // إزالة "Bearer "
+    const token = authHeader.substring(7);
 
-    // التحقق من صحة التوكن
     let decoded;
     try {
       decoded = verifyAccessToken(token);
@@ -49,7 +43,6 @@ router.get('/profile', async (req, res) => {
       }
     }
 
-    // جلب بيانات المستخدم
     const user = await User.findById(decoded.userId).select('-password');
     if (!user) {
       return res.status(404).json({
@@ -58,8 +51,6 @@ router.get('/profile', async (req, res) => {
         message: 'المستخدم غير موجود'
       });
     }
-
-    // في الحالة الطبيعية، يتم تنفيذ المنطق وإرجاع النتيجة
     res.status(200).json({
       success: true,
       message: 'تم جلب البيانات بنجاح',
@@ -82,13 +73,8 @@ router.get('/profile', async (req, res) => {
   }
 });
 
-/**
- * Route: GET /api/protected/dashboard
- * مثال آخر على Route محمي
- */
 router.get('/dashboard', async (req, res) => {
   try {
-    // قراءة Access Token من Header
     const authHeader = req.headers.authorization;
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -101,7 +87,6 @@ router.get('/dashboard', async (req, res) => {
 
     const token = authHeader.substring(7);
 
-    // التحقق من صحة التوكن
     let decoded;
     try {
       decoded = verifyAccessToken(token);
@@ -126,8 +111,6 @@ router.get('/dashboard', async (req, res) => {
         });
       }
     }
-
-    // في الحالة الطبيعية، يتم تنفيذ المنطق
     res.status(200).json({
       success: true,
       message: 'مرحباً في لوحة التحكم',

@@ -3,9 +3,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-/**
- * إنشاء Access Token
- */
 export const generateAccessToken = (payload) => {
   if (!process.env.JWT_ACCESS_SECRET || !process.env.JWT_ACCESS_EXPIRES_IN) {
     throw new Error('JWT_ACCESS_SECRET و JWT_ACCESS_EXPIRES_IN مطلوبان في ملف .env');
@@ -19,9 +16,6 @@ export const generateAccessToken = (payload) => {
   );
 };
 
-/**
- * إنشاء Refresh Token
- */
 export const generateRefreshToken = (payload) => {
   if (!process.env.JWT_REFRESH_SECRET || !process.env.JWT_REFRESH_EXPIRES_IN) {
     throw new Error('JWT_REFRESH_SECRET و JWT_REFRESH_EXPIRES_IN مطلوبان في ملف .env');
@@ -35,9 +29,6 @@ export const generateRefreshToken = (payload) => {
   );
 };
 
-/**
- * التحقق من Access Token
- */
 export const verifyAccessToken = (token) => {
   if (!process.env.JWT_ACCESS_SECRET) {
     throw new Error('JWT_ACCESS_SECRET مطلوب في ملف .env');
@@ -55,9 +46,6 @@ export const verifyAccessToken = (token) => {
   }
 };
 
-/**
- * التحقق من Refresh Token
- */
 export const verifyRefreshToken = (token) => {
   if (!process.env.JWT_REFRESH_SECRET) {
     throw new Error('JWT_REFRESH_SECRET مطلوب في ملف .env');

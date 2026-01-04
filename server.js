@@ -5,22 +5,19 @@ import { connectDatabase } from './config/database.js';
 import authRoutes from './routes/auth.js';
 import protectedRoutes from './routes/protected.js';
 
-// تحميل متغيرات البيئة
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);
 
-// Route للتحقق من حالة السيرفر
+// health check
 app.get('/health', (req, res) => {
   res.status(200).json({
     success: true,
@@ -29,7 +26,6 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Route للصفحة الرئيسية
 app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
@@ -48,7 +44,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// معالج الأخطاء العام
 app.use((err, req, res, next) => {
   console.error('خطأ غير متوقع:', err);
   res.status(500).json({
@@ -58,20 +53,16 @@ app.use((err, req, res, next) => {
   });
 });
 
-// بدء السيرفر
 const startServer = async () => {
   try {
-    // الاتصال بقاعدة البيانات
     await connectDatabase();
-    
-    // تشغيل السيرفر
     app.listen(PORT, () => {
-      console.log(`✓ السيرفر يعمل على المنفذ ${PORT}`);
-      console.log(`✓ البيئة: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`✓ الرابط: http://localhost:${PORT}`);
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.error('✗ فشل في بدء السيرفر:', error.message);
+    console.error('Failed to start server:', error.message);
     process.exit(1);
   }
 };
